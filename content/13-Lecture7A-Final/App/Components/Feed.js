@@ -20,7 +20,8 @@ export default class Feed extends React.Component {
     if (this.props.content) {
       this.setState({feedEntries: this.props.content});
     } else {
-      // this.getFeedData();
+      // EX-ADD (Uncommented)
+      this.getFeedData();
     }
   }
 
@@ -34,9 +35,16 @@ export default class Feed extends React.Component {
   onProfilePressed = (username) => {
     /*PART 4.1: call the prop that you passed in from HomeScreen!*/
     /* make sure that the prop is not null first by using an if statement*/
-
+    // EX-ADD (Added below)
+    console.log(username);
+    
     /* PART 4.2: when calling the prop function, pass the username to it */
     //sample call to a function inside of props: this.props.someFunction('someParameterString');
+
+    // EX-ADD (Added below)
+    if (this.props.onProfileRequested) {
+      this.props.onProfileRequested(username);
+    }
   }
 
   //here's a simple key extractor which uses the item's ID as a unique value indicator
@@ -48,8 +56,17 @@ export default class Feed extends React.Component {
     /* FeedItem props: content and onProfilePressed */
     /* Important spec: pass the function this.onProfilePressed to the FeedItem prop ^ */
     
+    // EX-ADD (Commented out below)
+    // return (
+    //   <Text>Implement me by calling FeedItem.js correctly</Text>
+    // );
+
+    // EX-ADD (Added below)
     return (
-      <Text>Implement me by calling FeedItem.js correctly</Text>
+      <FeedItem 
+        content={item}
+        onProfilePressed={this.onProfilePressed}
+      />
     );
   }
 
@@ -85,7 +102,14 @@ export default class Feed extends React.Component {
       /* NOTE: that Feed.js accepts a prop called 'listHeaderComponent', which is what you should render as a header here. */
 
       return (
-        <Text>Add your Flatlist here!</Text>
+        // EX-ADD (Commented out below)
+        // <Text>Add your Flatlist here!</Text>
+        <FlatList
+          data={this.state.feedEntries}
+          renderItem={this.renderItem}
+          keyExtractor={(item, index) => index.toString()}
+        />
+
       );
     }
 

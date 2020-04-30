@@ -36,7 +36,7 @@ export default function UserProfileScreen({ navigation, route })  {
       setLoading(true);
       await sleep(500);
       getPhotosForUser(json => {
-        console.log(json);
+        // console.log(json);
         setContent(json);
         setLoading(false);
         if (json[0]){

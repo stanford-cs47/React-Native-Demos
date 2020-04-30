@@ -28,6 +28,9 @@ export default function HomeScreen({ navigation, route }) {
     /* this function will be inside of this.props.navigation */
     /* think of destructing the function "navigate" from inside of your navigation props*/
 
+    // EX-ADD (Added below)
+    navigation.navigate('UserProfile', { username: username });
+
     /* We can only call the navigate function from here because AppNavigation only explicitly defines this as a screen (under the stack that you created). */
     /* The Feed.js and FeedItem.js are invisible to the app's navigation, therefore they cannot be used to navigate. We must pass everything back to here. */
 

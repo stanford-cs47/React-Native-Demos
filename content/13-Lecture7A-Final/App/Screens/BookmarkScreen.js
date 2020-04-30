@@ -13,7 +13,7 @@ export default function BookmarkScreen({ navigation }) {
 
   useEffect(() => {
     reloadBookmarks();
-  }, []);
+  }, [reloadBookmarks]);
 
   const getBookmarks = async () => {
     try {

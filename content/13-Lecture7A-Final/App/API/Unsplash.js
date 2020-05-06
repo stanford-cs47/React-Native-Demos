@@ -10,7 +10,7 @@ export function getPopularPhotos(callback) {
   unsplash.photos.listPhotos(1, 10, "popular")
   .then(toJson)
   .then(json => {
-    console.log(json);
+    // console.log(json);
     callback(json);
   }).catch((err) => {
     console.warn(err);

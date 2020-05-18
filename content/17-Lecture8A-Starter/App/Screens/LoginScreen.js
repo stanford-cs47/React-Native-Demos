@@ -13,6 +13,7 @@ export default function LoginScreen({ navigation }) {
   [errorMessageLogin, setErrorMessageLogin] = useState('');
 
   useLayoutEffect(() => {
+    if (!navigation) return;
     navigation.setOptions({
       headerTitle: (
         <View style={{justifyContent: 'center', alignItems: 'center'}}>
@@ -52,6 +53,7 @@ export default function LoginScreen({ navigation }) {
       // Note that we don't have to tell the app that the user has logged in.
       // firebase.auth().onAuthStateChanged() in App.js communicates this for us!
       await firebase.auth().signInWithEmailAndPassword(loginEmail, loginPassword)
+      console.log('Successfully logged in');
     } catch (err) {
       console.log(err);
     }

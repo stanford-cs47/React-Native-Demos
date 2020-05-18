@@ -3,7 +3,6 @@
     "name": "Demo",
     "slug": "Lecture7A-Starter",
     "privacy": "public",
-    "sdkVersion": "35.0.0",
     "platforms": [
       "ios",
       "android",

@@ -9,26 +9,23 @@ import firebase from 'firebase';
 export default function BookmarkScreen({ navigation }) {
   [bookmarks, setBookmarks] = useState([]);
   [isRefreshing, setIsRefreshing] = useState(false);
-  [unsubscribe, setUnsubscribe] = useState(null);
 
-  useEffect(() => {
+  const unsubscribe = () => {
     const user = firebase.auth().currentUser;
-    let bookmarksRef = firestore.collection('users/' + user.uid + '/bookmarks');
+    const bookmarksRef = firestore.collection('users/' + user.uid + '/bookmarks');
     // We want our list of bookmarks to update in realtime (so the user doesn't have to
     // refresh the page to see any changes). This basically waits for a change in the
     // bookmarks collection and then tells the program to retrieve all of the bookmarks
     // again (it basically calls your code for getBookmarks).
-    let bookmarksUnsubscribe = bookmarksRef.onSnapshot(() => {
+    bookmarksRef.onSnapshot(() => {
       reloadBookmarks();
     });
-    setUnsubscribe(bookmarksUnsubscribe);
+  }
 
+  useEffect(() => {
     reloadBookmarks(); // Initial loading of bookmarks
-
-    return () => {
-      unsubscribe();
-    };
-  }, [reloadBookmarks]);
+    return unsubscribe(); // Stop subscribing when component unmounts
+  }, []);
 
   // STEP 4: Read all of the user's bookmarks from the database
   // ---------------------------------------------------------------------------------------

@@ -5,12 +5,12 @@ import AppConfig from '../Config/AppConfig';
 getConfig = () => new Unsplash(AppConfig.unsplash[Math.floor(Math.random() * 9)]);
 
 export function getPopularPhotos(callback) {
-  console.log(AppConfig.unsplashAlt);
+  // console.log(AppConfig.unsplashAlt);
   const unsplash = getConfig();
   unsplash.photos.listPhotos(1, 10, "popular")
   .then(toJson)
   .then(json => {
-    console.log(json);
+    // console.log(json);
     callback(json);
   }).catch((err) => {
     console.warn(err);

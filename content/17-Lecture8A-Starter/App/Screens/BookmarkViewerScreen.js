@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect, useLayoutEffect } from 'react';
 import PropTypes from 'prop-types';
 import { StyleSheet, Text, View, ScrollView } from 'react-native';
 import { material } from 'react-native-typography';
@@ -6,41 +6,33 @@ import { Metrics, Colors } from '../Themes';
 import { Entypo } from '@expo/vector-icons';
 import FeedItem from '../Components/FeedItem'
 
-export default class BookmarkViewerScreen extends React.Component {
+export default function BookmarkViewerScreen({ navigation, route })  {
+  [content, setContent] = useState(null);
 
-  static navigationOptions = ({ navigation }) => {
-    const params = navigation.state.params || {};
+  useEffect(() => {
+    const updatedContent = route.params?.content ?? {};
+    setContent(updatedContent);
+  }, [route]);
 
-    return {
+  useLayoutEffect(() => {
+    navigation.setOptions({
       headerTitle: (
         <View style={{justifyContent: 'center', alignItems: 'center'}}>
           <Text style={material.body2}>Unsplash</Text>
           <Text style={[material.caption, {fontSize: 10}]}>Saved Bookmark</Text>
         </View>
       )
-    };
-  };
+    });
 
-  state = {
-    content: null,
-  }
+  }, [navigation])
 
-  componentDidMount() {
-    const params = this.props.navigation.state.params || {};
-    const content = params.content;
-
-    this.setState({content: content});
-  }
-
-  render() {
-    return (
-      <View style={styles.container}>
-        <ScrollView>
-          {this.state.content ? <FeedItem content={this.state.content} /> : null}
-        </ScrollView>
-      </View>
-    );
-  }
+  return (
+    <View style={styles.container}>
+      <ScrollView>
+        { content ? <FeedItem content={content} /> : null }
+      </ScrollView>
+    </View>
+  );
 }
 
 const styles = StyleSheet.create({

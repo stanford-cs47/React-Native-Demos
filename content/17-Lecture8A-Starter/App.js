@@ -6,7 +6,7 @@ import firebase from 'firebase';
 export default class App extends React.Component {
   constructor(props) {
     super(props);
-    
+
     this.state = {
       loggedIn: false,
       unsubscribe: null
@@ -32,7 +32,7 @@ export default class App extends React.Component {
     this.state.unsubscribe();
   }
 
-  render() {   
+  render() {
     if (this.state.loggedIn) {
       return <AppNavigation />;
     } else {

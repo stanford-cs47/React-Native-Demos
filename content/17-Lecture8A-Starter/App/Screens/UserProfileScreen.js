@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useLayoutEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { StyleSheet, Text, View, ActivityIndicator, Image } from 'react-native';
 import { getPhotosForUser } from '../API/Unsplash.js';
@@ -7,63 +7,46 @@ import { Metrics, Colors } from '../Themes';
 import { Entypo } from '@expo/vector-icons';
 import Feed from '../Components/Feed'
 
-export default class UserProfileScreen extends React.Component {
+export default function UserProfileScreen({ navigation, route }) {
+  [username, setUsername] = useState(null);
+  [content, setContent] = useState({});
+  [loading, setLoading] = useState(true);
+  [user, setUser] = useState({});
 
-  static navigationOptions = ({ navigation }) => {
-    const params = navigation.state.params || {};
-    const username = params.username;
 
-    return {
+  useEffect(() => {
+    if (!navigation) return;
+    const updatedUsername = route.params?.username ?? null;
+    setUsername(updatedUsername);
+    loadUserContent(updatedUsername);
+  }, [route, loadUserContent, navigation]);
+
+  useLayoutEffect(() => {
+    navigation.setOptions({
       headerTitle: (
         <View style={{justifyContent: 'center', alignItems: 'center'}}>
           <Text style={material.body2}>Unsplash</Text>
           <Text style={[material.caption, {fontSize: 10}]}>{username}</Text>
         </View>
       )
-    };
-  };
+    });
 
-  state = {
-    content: {},
-    loading: true,
-    user: {},
-  }
+  }, [navigation])
 
-  componentDidMount() {
-    if(!this.props.navigation) return;
-
-    const params = this.props.navigation.state.params || {};
-    const username = params.username;
-    this.loadUserContent(username);
-  }
-
-  loadUserContent = async (username) => {
-    this.setState({loading: true});
-    await this.sleep(500);
+  const loadUserContent = async (username) => {
+    setLoading(true);
+    await sleep(500);
     getPhotosForUser(json => {
-      console.log(json);
-      this.setState({content: json, loading: false});
-
-      if (json[0]){
-        this.setState({user: json[0].user});
+      // console.log(json);
+      setContent(json);
+      setLoading(false);
+      if (json[0]) {
+        setUser(json[0].user)
       }
     }, username);
   }
 
-  render() {
-    const { content } = this.state;
-
-    return (
-      <View style={styles.container}>
-
-        {this.getFeedContent()}
-
-      </View>
-    );
-  }
-
-  getUserContent = () => {
-    const { user } = this.state;
+  const getUserContent = () => {
     if (!user.id) return null;
 
     return (
@@ -75,23 +58,19 @@ export default class UserProfileScreen extends React.Component {
     );
   }
 
-  getFeedContent = () => {
-    const { loading, content } = this.state;
-
-    if (loading) {
-      return (
-        <ActivityIndicator />
-      );
-    } else {
-      return (
-        <Feed content={content} listHeaderComponent={this.getUserContent()}/>
-      );
-    }
-  }
-
-  sleep = (ms) => {
+  const sleep = (ms) => {
     return new Promise(resolve => setTimeout(resolve, ms));
   }
+
+  return (
+    <View style={styles.container}>
+      { loading ?
+          <ActivityIndicator /> :
+          <Feed content={content} listHeaderComponent={getUserContent()}/>
+      }
+      {getFeedContent()}
+    </View>
+  );
 
 }
 

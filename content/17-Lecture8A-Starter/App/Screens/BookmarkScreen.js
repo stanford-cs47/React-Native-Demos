@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Text, View, Image, TouchableOpacity, FlatList } from 'react-native';
 import { material } from 'react-native-typography';
 import { Metrics } from '../Themes';
@@ -6,51 +6,36 @@ import styles from './Styles/BookmarkScreen.styles';
 import firestore from '../../firebase';
 import firebase from 'firebase';
 
-export default class BookmarkScreen extends React.Component {
+export default function BookmarkScreen({ navigation }) {
+  [bookmarks, setBookmarks] = useState([]);
+  [isRefreshing, setIsRefreshing] = useState(false);
 
-  static navigationOptions = ({ navigation }) => {
-    const params = navigation.state.params || {};
-
-    return {
-      title: 'Bookmarks',
-    };
-  };
-
-  state = {
-    bookmarks: [],
-    isRefreshing: false,
-    unsubscribe: null,
-  }
-
-  componentDidMount() {
+  const unsubscribe = () => {
     const user = firebase.auth().currentUser;
-    let bookmarksRef = firestore.collection('users/' + user.uid + '/bookmarks');
+    const bookmarksRef = firestore.collection('users/' + user.uid + '/bookmarks');
     // We want our list of bookmarks to update in realtime (so the user doesn't have to
-    // refresh the page to see any changes). This basically waits for a change in the 
+    // refresh the page to see any changes). This basically waits for a change in the
     // bookmarks collection and then tells the program to retrieve all of the bookmarks
     // again (it basically calls your code for getBookmarks).
-    let unsubscribe = bookmarksRef.onSnapshot(() => {
-      this.reloadBookmarks();
+    bookmarksRef.onSnapshot(() => {
+      reloadBookmarks();
     });
-    this.setState({ unsubscribe });
-    
-    this.reloadBookmarks(); // Initial loading of bookmarks
   }
 
-  componentWillUnmount() {
-    this.state.unsubscribe();
-  }
-
+  useEffect(() => {
+    reloadBookmarks(); // Initial loading of bookmarks
+    return unsubscribe(); // Stop subscribing when component unmounts
+  }, []);
 
   // STEP 4: Read all of the user's bookmarks from the database
   // ---------------------------------------------------------------------------------------
-  // Make sure you understand what path you need to pass in to get the correct reference 
+  // Make sure you understand what path you need to pass in to get the correct reference
   // for your BOOKMARKS COLLECTION.
   //
   // To check if it's working, bookmark a post and check the bookmark tab. That post should be
   // listed in that tab. Un-bookmark that post and check the bookmark tab again. Your list should
   // be updated to reflect this change.
-  getBookmarks = async () => {
+  const getBookmarks = async () => {
     try {
       const user = firebase.auth().currentUser;
       let bookmarks = [];
@@ -64,20 +49,20 @@ export default class BookmarkScreen extends React.Component {
     return ([]);
   }
 
-  bookmarkPressed = (item) => {
-    const { navigate } = this.props.navigation;
-    navigate('BookmarkViewer', { content: item });
+  const bookmarkPressed = (item) => {
+    navigation.navigate('BookmarkViewerScreen', { content: item });
   }
 
-  reloadBookmarks = async () => {
-    this.setState({isRefreshing: true});
-    const bookmarks = await this.getBookmarks();
-    this.setState({bookmarks: bookmarks, isRefreshing: false});
+  const reloadBookmarks = async () => {
+    setIsRefreshing(true);
+    const bookmarks = await getBookmarks();
+    setBookmarks(bookmarks);
+    setIsRefreshing(false);
   }
 
-  _keyExtractor = (item, index) => item.id;
+  const _keyExtractor = (item, index) => item.id;
 
-  renderItem = ({item}) => {
+  const renderItem = ({item}) => {
     return (
       <TouchableOpacity onPress={() => this.bookmarkPressed(item)} key={item.id}>
       <View style={styles.bookmarkContainer}>
@@ -91,28 +76,24 @@ export default class BookmarkScreen extends React.Component {
     );
   }
 
-  render() {
-
-    let emptyList = null;
-    if (!this.state.bookmarks[0]) {
-      emptyList = (<Text style={{marginTop: Metrics.navBarHeight}}>No bookmarks exist yet!</Text>);
-    }
-
-    return (
+  return (
       <View style={styles.container}>
 
-        {emptyList}
+        { (bookmarks.length == 0) &&
+          <Text style={{marginTop: Metrics.navBarHeight}}>
+            No bookmarks exist yet!
+          </Text>
+        }
 
         <FlatList
-          data={this.state.bookmarks}
-          keyExtractor={this._keyExtractor}
-          renderItem={this.renderItem}
-          onRefresh={this.reloadBookmarks}
-          refreshing={this.state.isRefreshing}
+          data={bookmarks}
+          keyExtractor={_keyExtractor}
+          renderItem={renderItem}
+          onRefresh={reloadBookmarks}
+          refreshing={isRefreshing}
         />
 
       </View>
-    );
-  }
+  );
 
 }

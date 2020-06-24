@@ -40,9 +40,10 @@ export default function App() {
 
   // 3.1 Add a function to delete an item from todos given its
   // index
-  const onSelectTodo = id => {
-    const newTodos = todos.filter((item, index) => index !== id);
-    setTodos(newTodos);
+  const deleteTodo = index => {
+    let todosCopy = JSON.parse(JSON.stringify(todos));
+    todosCopy.splice(index, 1);
+    setTodos(todosCopy);
   }
 
   return (
@@ -68,7 +69,7 @@ export default function App() {
               <ToDo
                 id={index}
                 text={item}
-                onSelect={onSelectTodo}
+                onSelect={deleteTodo}
                 />
              }
              keyExtractor={(item, index) => {

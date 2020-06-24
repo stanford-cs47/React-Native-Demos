@@ -41,9 +41,10 @@ export default class App extends React.Component {
 
   // 3.1 Add a function to delete an item from todos given its
   // index
-  onSelectTodo = id => {
-    const newTodos = this.state.todos.filter((item, index) => index !== id);
-    this.setState({todos: newTodos});
+  deleteTodo = index => {
+    let todosCopy = JSON.parse(JSON.stringify(this.state.todos));
+    todosCopy.splice(index, 1);
+    this.setState({ todos: todosCopy });
   }
 
   render() {
@@ -70,7 +71,7 @@ export default class App extends React.Component {
               <ToDo
                 id={index}
                 text={item}
-                onSelect={this.onSelectTodo}
+                onSelect={this.deleteTodo}
                 />
              }
              keyExtractor={(item, index) => {

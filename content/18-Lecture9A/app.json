@@ -3,7 +3,6 @@
     "name": "Lecture9A",
     "slug": "Lecture9A-demo",
     "privacy": "public",
-    "sdkVersion": "35.0.0",
     "platforms": [
       "ios",
       "android",

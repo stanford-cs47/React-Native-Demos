@@ -6,7 +6,7 @@ export default class SignInScreen extends React.Component {
     static navigationOptions = {
       title: 'Please sign in',
     };
-  
+
     render() {
       return (
         <View style={styles.container}>
@@ -14,16 +14,18 @@ export default class SignInScreen extends React.Component {
         </View>
       );
     }
-  
+
     _signInAsync = async () => {
+        const appId = '2523768417718674';
         try {
+            await Facebook.initializeAsync(appId);
             const {
                 type,
                 token,
                 expires,
                 permissions,
                 declinedPermissions,
-            } = await Facebook.logInWithReadPermissionsAsync('2523768417718674', {
+            } = await Facebook.logInWithReadPermissionsAsync(appId, {
                 permissions: ['public_profile'],
             });
             if (type === 'success') {
@@ -53,4 +55,3 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
 });
-  

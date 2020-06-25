@@ -1,9 +1,8 @@
 {
   "expo": {
-    "name": "To Do App",
-    "slug": "lecture4a-starter",
+    "name": "Exercise",
+    "slug": "Exercise",
     "privacy": "public",
-    "sdkVersion": "35.0.0",
     "platforms": [
       "ios",
       "android",

@@ -1,19 +1,24 @@
-import { createStackNavigator } from 'react-navigation-stack';
+import { createStackNavigator } from '@react-navigation/stack';
+import React from 'react';
 
 import * as screens from '../Screens';
 
-const StackNav = createStackNavigator({
-    StoreScreen: { screen: screens.StoreScreen },
-    ShipInfoScreen: { screen: screens.ShipInfoScreen },
-  }, {
-    initialRouteName: 'StoreScreen',
-    // Created custom header in each screen instead
-    headerMode: 'none',
-    // Set background color
-    cardStyle: { backgroundColor: 'black' },
-});
+const Stack = createStackNavigator();
 
-export default StackNav;
-
-
-
+export default class StackNav extends React.Component {
+  render() {
+    return (
+      <Stack.Navigator
+        initialRouteName='StoreScreen'
+        headerMode='none'
+        cardStyle={{ backgroundColor: 'black' }}>
+          <Stack.Screen
+            name="StoreScreen"
+            component={screens.StoreScreen}/>
+          <Stack.Screen
+            name="ShipInfoScreen"
+            component={screens.ShipInfoScreen}/>
+      </Stack.Navigator>
+    )
+  }
+}

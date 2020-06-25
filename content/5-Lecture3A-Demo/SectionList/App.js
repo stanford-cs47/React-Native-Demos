@@ -26,7 +26,7 @@ export default class App extends React.Component {
     try {
 
       // let randomNumber = Math.floor(Math.random() * 88) + 1; //Range 1 - 89
-      let response = await fetch(`https://swapi.co/api/people/${jediNum}`);
+      let response = await fetch(`https://swapi.dev/api/people/${jediNum}`);
       let responseJson = await response.json();
 
       //console.log(responseJson);

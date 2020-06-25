@@ -3,7 +3,6 @@
     "name": "Star Wars Store",
     "slug": "StarWarsCars",
     "privacy": "public",
-    "sdkVersion": "35.0.0",
     "platforms": [
       "ios",
       "android",

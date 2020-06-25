@@ -1,30 +1,23 @@
 import React from 'react';
 import { StyleSheet, Text, View, Button } from 'react-native';
 
-export default class DrawerFunctions extends React.Component {
-
-  static navigationOptions = {
-     title: 'Drawer Functions ',
-   };
-
-  render() {
-    return (
+export default function DrawerFunctions({ navigation }) {
+  return (
       <View style={styles.container}>
       <Button
         title="Open"
-        onPress={() => this.props.navigation.openDrawer()}
+        onPress={() => navigation.openDrawer()}
       />
       <Button
         title="Close"
-        onPress={() => this.props.navigation.closeDrawer()}
+        onPress={() => navigation.closeDrawer()}
       />
       <Button
         title="Buttons"
-        onPress={() => this.props.navigation.toggleDrawer()}
+        onPress={() => navigation.toggleDrawer()}
       />
       </View>
-    );
-  }
+  );
 }
 
 const styles = StyleSheet.create({

@@ -20,26 +20,26 @@ const App = () => {
       setLoading(true);
 
       let randomNumber = Math.floor(Math.random() * 88) + 1;
-      let response = await fetch(`https://swapi.co/api/people/${randomNumber}`);
+      let response = await fetch(`https://swapi.dev/api/people/${randomNumber}`);
       let responseJson = await response.json();
-  
+
       // console.log(responseJson);
-  
+
       // Cleaning up our response...
       let cleanObject = responseJson;
       cleanObject.hairColor = responseJson.hair_color;
       cleanObject.eyeColor = responseJson.eye_color;
       cleanObject.birthYear = responseJson.birth_year;
       cleanObject.weight = responseJson.mass;
-  
+
       setJedi(cleanObject);
       setLoading(false);
-  
+
     } catch (error) {
       console.error(error);
     }
   }
-  
+
   const showCard = () => {
     getJedi();
   }

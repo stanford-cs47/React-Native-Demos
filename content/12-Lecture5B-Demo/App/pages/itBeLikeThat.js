@@ -1,22 +1,15 @@
 import React from 'react';
 import { StyleSheet, Text, View, Button } from 'react-native';
 
-export default class ItBeLikeThat extends React.Component {
-
-  static navigationOptions = {
-     title: 'It Be Like That',
-   };
-
-  render() {
-    return (
+export default function ItBeLikeThat({ navigation }) {
+  return (
       <View style={styles.container}>
       <Button
         title="Navigate"
-        onPress={() => this.props.navigation.navigate('Buttons')}
+        onPress={() => navigation.navigate('Buttons')}
       />
       </View>
-    );
-  }
+  );
 }
 
 const styles = StyleSheet.create({

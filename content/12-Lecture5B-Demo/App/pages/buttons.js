@@ -1,30 +1,23 @@
 import React from 'react';
 import { StyleSheet, Text, View, Button } from 'react-native';
 
-export default class Buttons extends React.Component {
-
-  static navigationOptions = {
-     title: 'Buttons',
-   };
-
-  render() {
+export default function Buttons({ navigation }) {
     return (
       <View style={styles.container}>
       <Button
         title="Go Back"
-        onPress={()=> this.props.navigation.goBack()}
+        onPress={()=> navigation.goBack()}
       />
       <Button
         title="Push"
-        onPress={()=> this.props.navigation.push("Buttons")}
+        onPress={()=> navigation.push("Buttons")}
       />
       <Button
         title="PopToTop"
-        onPress={()=> this.props.navigation.popToTop()}
+        onPress={()=> navigation.popToTop()}
       />
       </View>
     );
-  }
 }
 
 const styles = StyleSheet.create({
